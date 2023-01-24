@@ -8,11 +8,10 @@
 import UIKit
 
 final class ProfileHeaderView: UIView {
+    
+    var statusText: String?
 
-    // MARK: - Private Properties
-    private var statusText: String?
-
-    private lazy var profileImageView: UIImageView = {
+    lazy var profileImageView: UIImageView = {
         let profileImage = UIImageView(frame: CGRect(x: 0, y: 0, width: 132, height: 132))
         profileImage.layer.masksToBounds = true
         profileImage.layer.cornerRadius = profileImage.frame.width / 2
@@ -22,10 +21,11 @@ final class ProfileHeaderView: UIView {
         profileImage.layer.borderWidth = 3
         profileImage.translatesAutoresizingMaskIntoConstraints = false
         profileImage.image = UIImage(systemName: "person.crop.circle.fill")
+        profileImage.tintColor = .white
         return profileImage
     }()
 
-    private lazy var profileTitleLabel: UILabel = {
+    lazy var profileTitleLabel: UILabel = {
         let profileLabel = UILabel()
         profileLabel.translatesAutoresizingMaskIntoConstraints = false
         profileLabel.font = .systemFont(ofSize: 18, weight: .bold)
@@ -34,7 +34,7 @@ final class ProfileHeaderView: UIView {
         return profileLabel
     }()
 
-    private lazy var profileStatusLabel: UILabel = {
+    lazy var profileStatusLabel: UILabel = {
         let statusLabel = UILabel()
         statusLabel.translatesAutoresizingMaskIntoConstraints = false
         statusLabel.font = .systemFont(ofSize: 14, weight: .regular)
@@ -44,7 +44,7 @@ final class ProfileHeaderView: UIView {
         return statusLabel
     }()
 
-    private lazy var profileStatusButton: UIButton = {
+    lazy var profileStatusButton: UIButton = {
         let statusButton = UIButton()
         statusButton.translatesAutoresizingMaskIntoConstraints = false
         statusButton.setTitle("Setup Status", for: .normal)
@@ -54,11 +54,10 @@ final class ProfileHeaderView: UIView {
         statusButton.layer.shadowRadius = 4
         statusButton.layer.shadowColor = UIColor.black.cgColor
         statusButton.layer.shadowOpacity = 0.7
-        statusButton.addTarget(self, action: #selector(profileStatusButtonTapped), for: .touchUpInside)
         return statusButton
     }()
 
-    private lazy var profileStatusTextField: UITextField = {
+    lazy var profileStatusTextField: UITextField = {
         let statusTextField = UITextField(frame: CGRect(x: 0, y: 0, width: 0, height: 40))
         statusTextField.translatesAutoresizingMaskIntoConstraints = false
         statusTextField.font = .systemFont(ofSize: 15, weight: .regular)
@@ -70,52 +69,27 @@ final class ProfileHeaderView: UIView {
         statusTextField.layer.borderWidth = 1
         statusTextField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: statusTextField.frame.height))
         statusTextField.leftViewMode = .always
-        setKeyboardSettings(forUITextField: statusTextField)
-        statusTextField.addTarget(self, action: #selector(profileStatusTextChanged), for: .editingChanged)
         return statusTextField
     }()
-
-    // MARK: - UiView Life Cycle
-    override func draw(_ rect: CGRect) {
-        addSubviews(
-            profileImageView,
-            profileTitleLabel,
-            profileStatusLabel,
-            profileStatusButton,
-            profileStatusTextField
-        )
+    
+    init() {
+        super.init(frame: CGRect())
+        backgroundColor = .lightGray
         setConstraints()
-
     }
-
-    @objc private func profileStatusButtonTapped() {
-        profileStatusLabel.text = statusText
-        profileStatusTextField.text = .none
-        profileStatusTextField.resignFirstResponder()
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
-
-    @objc private func profileStatusTextChanged(_ textField: UITextField) {
-        guard let status = textField.text, status.count <= 90 else {
-            while textField.text?.count != 89 {
-                textField.text?.removeLast()
-            }
-            showAlert(withTitle: "Oops!", andMessage:  "You can input maximum 90 symbols!")
-            return
-        }
-        statusText = status
-        profileStatusTextField.becomeFirstResponder()
-    }
-}
-
-// MARK: - Setup Settings
-extension ProfileHeaderView {
-    private func addSubviews(_ subviews: UIView...) {
-        subviews.forEach { subview in
-            addSubview(subview)
-        }
-    }
-
+    
     private func setConstraints() {
+        
+        addSubview(profileImageView)
+        addSubview(profileTitleLabel)
+        addSubview(profileStatusButton)
+        addSubview(profileStatusLabel)
+        addSubview(profileStatusTextField)
+        
         NSLayoutConstraint.activate([
             profileImageView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 16),
             profileImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
@@ -142,46 +116,3 @@ extension ProfileHeaderView {
     }
 }
 
-// MARK: - Keyboard
-extension ProfileHeaderView: UITextFieldDelegate {
-    private func setKeyboardSettings(forUITextField textfield: UITextField) {
-        textfield.delegate = self
-        textfield.keyboardAppearance = .dark
-        textfield.autocorrectionType = .no
-        textfield.returnKeyType = .done
-        textfield.enablesReturnKeyAutomatically = true
-        textfield.clearButtonMode = .always
-        let tapOnView = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        addGestureRecognizer(tapOnView)
-    }
-
-    @objc func dismissKeyboard() {
-        endEditing(true)
-    }
-
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        profileStatusLabel.text = textField.text
-        textField.text = .none
-        textField.resignFirstResponder()
-        return true
-    }
-}
-
-// MARK: - Alert
-extension ProfileHeaderView {
-    private func showAlert(withTitle title: String, andMessage message: String) {
-        guard let rootVC = window?.rootViewController else { return }
-        let alert = UIAlertController(
-            title: title,
-            message: message,
-            preferredStyle: .alert
-        )
-
-        let okAction = UIAlertAction(title: "Ok", style: .default) { _ in
-            print("This is Ok Action")
-        }
-
-        alert.addAction(okAction)
-        rootVC.present(alert, animated: true)
-    }
-}
