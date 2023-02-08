@@ -9,7 +9,7 @@ import UIKit
 
 final class LogInView: UIView {
     
-    private let VKColor = UIColor(named: "VKColor")
+    private let VKColor = UIColor(named: "VKcolor")
     
     lazy var logoImageView: UIImageView = {
         let imageView = UIImageView()
@@ -68,7 +68,7 @@ final class LogInView: UIView {
         buttonConfiguration.background.backgroundColor = VKColor
         buttonConfiguration.baseForegroundColor = VKColor
         var button = OutlineButton(configuration: buttonConfiguration, primaryAction: nil)
-        button.layer.cornerRadius = 10
+        button.layer.cornerRadius = 5
         button.isSelected = true
         button.translatesAutoresizingMaskIntoConstraints = false
         return button

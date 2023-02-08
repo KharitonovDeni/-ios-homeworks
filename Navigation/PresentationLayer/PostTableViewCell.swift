@@ -80,6 +80,7 @@ class PostTableViewCell: UITableViewCell {
         addSubview(descriptionText)
         addSubview(likes)
         addSubview(views)
+        addSubview(postAuthor)
         
         NSLayoutConstraint.activate([
             postAuthor.topAnchor.constraint(equalTo: topAnchor, constant: 16),

@@ -45,7 +45,7 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
         label.font = .systemFont(ofSize: 14, weight: .regular)
         label.text = user.status
         label.numberOfLines = 3
-        label.textColor = .gray
+        label.textColor = .black
         return label
     }()
     
@@ -53,17 +53,18 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Setup Status", for: .normal)
-        button.backgroundColor = UIColor(named: "VKColor")
-        button.layer.cornerRadius = 4
+        button.backgroundColor = UIColor(named: "VKcolor")
+        button.layer.cornerRadius = 10
         button.layer.shadowOffset = CGSize(width: 4, height: 4)
         button.layer.shadowRadius = 4
-        button.layer.shadowColor = UIColor.black.cgColor
+        button.layer.shadowColor = UIColor.gray.cgColor
         button.layer.shadowOpacity = 0.7
+        button.addTarget(self, action: #selector(profileChangeStatusButtonTapped), for: .touchUpInside)
         return button
     }()
     
     lazy var statusTextField: UITextField = {
-        let textField = UITextField(frame: CGRect(x: 0, y: 0, width: 0, height: 40))
+        let textField = UITextField(frame: CGRect(x: 0, y: 0, width: 0, height: 50))
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.font = .systemFont(ofSize: 15, weight: .regular)
         textField.layer.masksToBounds = true
@@ -72,24 +73,17 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
         textField.layer.cornerRadius = 12
         textField.layer.borderColor = UIColor.black.cgColor
         textField.layer.borderWidth = 1
-        textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: textField.frame.height))
+        textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 20, height: textField.frame.height))
         textField.leftViewMode = .always
+        setKeyboardSettings(forUITextField: textField)
+        textField.addTarget(self, action: #selector(profileStatusTextChanged), for: .editingChanged)
         return textField
     }()
     
-    lazy var tableView: UITableView = {
-        let tableView = UITableView(frame: self.frame, style: .grouped)
-        tableView.backgroundColor = .systemGray3
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        return tableView
-    }()
-    
-    
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
-        contentView.backgroundColor = .systemGray3
+        contentView.backgroundColor = .systemGray6
         contentView.layer.shadowOffset = CGSize(width: 4, height: 4)
-        contentView.layer.cornerRadius = 10
         contentView.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
         setConstraints()
     }
@@ -98,13 +92,32 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    @objc private func profileChangeStatusButtonTapped() {
+        print("New profile status \(statusText ?? "")")
+        statusLabel.text = statusText ?? ""
+        statusTextField.text = .none
+        statusTextField.resignFirstResponder()
+    }
+
+    @objc private func profileStatusTextChanged(_ textField: UITextField) {
+        guard let status = textField.text, status.count <= 90 else {
+            while textField.text?.count != 89 {
+                textField.text?.removeLast()
+            }
+            showAlert(withTitle: "Oops!", andMessage:  "You can input maximum 90 symbols!")
+            return
+        }
+        statusText = status
+        statusTextField.becomeFirstResponder()
+    }
+    
     private func setConstraints() {
         
-        addSubview(avatarImageView)
-        addSubview(fullNameLabel)
-        addSubview(statusLabel)
-        addSubview(statusTextField)
-        addSubview(statusButton)
+        contentView.addSubview(avatarImageView)
+        contentView.addSubview(fullNameLabel)
+        contentView.addSubview(statusLabel)
+        contentView.addSubview(statusTextField)
+        contentView.addSubview(statusButton)
         
         NSLayoutConstraint.activate([
             avatarImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
@@ -136,15 +149,50 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
             statusButton.topAnchor.constraint(equalTo: avatarImageView.bottomAnchor, constant: 16),
             statusButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             statusButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            statusButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16)
-        ])
-        
-        NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
-            tableView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor)
+            statusButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
+            statusButton.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
+    
+    private func showAlert(withTitle title: String, andMessage message: String) {
+        guard let rootVC = window?.rootViewController else { return }
+        let alert = UIAlertController(
+            title: title,
+            message: message,
+            preferredStyle: .alert
+        )
+
+        let okAction = UIAlertAction(title: "Ok", style: .default) { _ in
+            print("This is Ok Action")
+        }
+
+        alert.addAction(okAction)
+        rootVC.present(alert, animated: true)
+    }
 }
+
+
+
+extension ProfileHeaderView: UITextFieldDelegate {
+    private func setKeyboardSettings(forUITextField textField: UITextField) {
+        textField.delegate = self
+        textField.keyboardAppearance = .dark
+        textField.autocorrectionType = .no
+        textField.returnKeyType = .done
+        textField.enablesReturnKeyAutomatically = true
+        textField.clearButtonMode = .always
+        let tapOnView = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        addGestureRecognizer(tapOnView)
+    }
+
+    @objc func dismissKeyboard() {
+        endEditing(true)
+    }
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        dismissKeyboard()
+        return true
+    }
+}
+
 

@@ -2,7 +2,25 @@
 //  PostView.swift
 //  Navigation
 //
-//  Created by Darya Zhitova on 06.02.2023.
+//  Created by Denis on 06.02.2023.
 //
 
-import Foundation
+import UIKit
+
+final class PostView: UIView {
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setConstraints()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setConstraints() {}
+
+}
+
+
+

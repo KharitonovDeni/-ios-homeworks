@@ -22,15 +22,6 @@ struct User {
     }
 
     static func getDefaultUser() -> User {
-        User(
-            name: "Foo",
-            surname: "Bar",
-            username: "Resu",
-            email: "foobar@gmail.com",
-            phone: "88005553535",
-            password: "password",
-            status: "*args and **kwargs...",
-            image: "delias"
-        )
+        User(name: "Foo", surname: "Bar",username: "Resu", email: "foobar@gmail.com", phone: "88005553535", password: "password", status: "*args and **kwargs...", image: "delias")
     }
 }

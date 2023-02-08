@@ -32,6 +32,7 @@ final class LogInViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.view = loginView
         setKeyboardSettings(forUITextField: loginView.emailOrPhoneTextField)
         setKeyboardSettings(forUITextField: loginView.passwordTextField)
         setupScrollView()
@@ -87,8 +88,7 @@ final class LogInViewController: UIViewController {
         let profileVC = ProfileViewController()
         guard let logInValue = contentView.emailOrPhoneTextField.text else { return }
         guard let password = contentView.passwordTextField.text else { return }
-        if user.password == password &&
-            (user.email == logInValue || user.phone == logInValue) {
+        if user.password == password && (user.email == logInValue || user.phone == logInValue) {
             navigationController?.pushViewController(profileVC, animated: true)
         } else {
             navigationController?.pushViewController(profileVC, animated: true)
@@ -99,14 +99,14 @@ final class LogInViewController: UIViewController {
     func setupScrollView() {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
-        
+
         NSLayoutConstraint.activate([
             scrollView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             scrollView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
-        
+
         NSLayoutConstraint.activate([
             contentView.centerYAnchor.constraint(equalTo: scrollView.centerYAnchor),
             contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
@@ -127,11 +127,11 @@ extension LogInViewController: UITextFieldDelegate {
         textField.enablesReturnKeyAutomatically = true
         textField.clearButtonMode = .always
         let tapOnView = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        addGestureRecognizer(tapOnView)
+        view.addGestureRecognizer(tapOnView)
     }
 
     @objc func dismissKeyboard() {
-        endEditing(true)
+        view.endEditing(true)
     }
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

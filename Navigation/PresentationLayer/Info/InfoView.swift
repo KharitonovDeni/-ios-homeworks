@@ -11,11 +11,9 @@ final class InfoView: UIView {
     
     lazy var showAlertButton: UIButton = {
         var buttonConfiguration = UIButton.Configuration.filled()
-        buttonConfiguration.baseBackgroundColor = UIColor(named: "VKColor")
+        buttonConfiguration.baseBackgroundColor = UIColor(named: "VKcolor")
         buttonConfiguration.title = "Show Alert"
-        let button = UIButton(configuration: buttonConfiguration, primaryAction: UIAction { [unowned self] _ in
-                showAlert(withTitle: "Hi!", andMessage: "This is Alert!")
-            })
+        let button = UIButton(configuration: buttonConfiguration)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.layer.shadowOffset = CGSize(width: 2, height: 2)
         button.layer.shadowRadius = 4
@@ -28,11 +26,7 @@ final class InfoView: UIView {
         var buttonConfiguration = UIButton.Configuration.filled()
         buttonConfiguration.baseBackgroundColor = .systemRed
         buttonConfiguration.title = "Cancel"
-        let button = UIButton(
-            configuration: buttonConfiguration,
-            primaryAction: UIAction { [unowned self] _ in
-                dismiss(animated: true)
-            })
+        let button = UIButton(configuration: buttonConfiguration)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.layer.shadowOffset = CGSize(width: 2, height: 2)
         button.layer.shadowRadius = 4
