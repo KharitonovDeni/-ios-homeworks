@@ -67,10 +67,7 @@ final class FeedViewController: UIViewController {
         setStackSubviews(goToPostButton, goToPostButtonSecond)
         setConstraints()
     }
-}
-
-// MARK: - Setup Settings
-extension FeedViewController {
+    
     private func setupNavigationBar() {
         title = "Feed"
         let navBarAppearance = UINavigationBarAppearance()
@@ -93,10 +90,7 @@ extension FeedViewController {
             stackView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
         ])
     }
-}
-
-// MARK: - Private Methods
-extension FeedViewController {
+    
     private func goToPost() {
         let postVC = PostViewController()
         postVC.postTitle = "Post"

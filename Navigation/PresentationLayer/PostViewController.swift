@@ -19,23 +19,14 @@ final class PostViewController: UIViewController {
         title = postTitle
         setupNavigationBar()
     }
-}
-
-// MARK: - Private Methods
-extension PostViewController {
+    
     private func setupNavigationBar() {
         let navBarAppearance = UINavigationBarAppearance()
         navBarAppearance.backgroundColor = .systemGray3
         navBarAppearance.titleTextAttributes = [.foregroundColor: UIColor(named: "VKColor") ?? UIColor.systemCyan]
         navigationController?.navigationBar.standardAppearance = navBarAppearance
         navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearance
-        navigationItem.rightBarButtonItems = [
-            UIBarButtonItem(
-                title: "Info",
-                style: .plain,
-                target: self,
-                action: #selector(goToInfo)
-            )]
+        navigationItem.rightBarButtonItems = [UIBarButtonItem(title: "Info", style: .plain, target: self, action: #selector(goToInfo))]
         navigationController?.navigationBar.tintColor = UIColor(named: "VKColor")
     }
     

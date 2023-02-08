@@ -22,9 +22,7 @@ extension UIButton.Configuration {
 
 class OutlineButton: UIButton {
     override func updateConfiguration() {
-        guard let configuration = configuration else {
-            return
-        }
+        guard let configuration = configuration else { return }
 
         var updatedConfiguration = configuration
 
@@ -66,15 +64,10 @@ class OutlineButton: UIButton {
         }
 
         background.strokeColor = strokeColor
-        // 1
-        // background.backgroundColor = backgroundColor
         background.backgroundColorTransformer = UIConfigurationColorTransformer { color in
-
             return backgroundColor
         }
 
-        // 2
-        // updatedConfiguration.baseForegroundColor = foregroundColor
         updatedConfiguration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
 
             var container = incoming

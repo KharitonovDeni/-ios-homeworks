@@ -11,30 +11,29 @@ import UIKit
 final class LogInViewController: UIViewController {
 
     let user = User.getDefaultUser()
+    private lazy var loginView = LogInView()
+    
 
     lazy private var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.backgroundColor = .systemGray5
-        scrollView.addSubview(contentView)
         scrollView.showsVerticalScrollIndicator = false
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.contentSize = CGSize(width: .zero, height: UIScreen.main.bounds.height + 300)
         return scrollView
     }()
 
     lazy private var contentView: LogInView = {
         let contentView = LogInView()
-        contentView.logInButton.addTarget(
-            self,
-            action: #selector(logInButtonDidTapped),
-            for: .touchUpInside
-        )
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.logInButton.addTarget(self, action: #selector(logInButtonDidTapped), for: .touchUpInside)
         return contentView
     }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.addSubview(scrollView)
-
+        setKeyboardSettings(forUITextField: loginView.emailOrPhoneTextField)
+        setKeyboardSettings(forUITextField: loginView.passwordTextField)
         setupScrollView()
     }
 
@@ -62,38 +61,19 @@ final class LogInViewController: UIViewController {
     }
 
     private func addObservers() {
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(keyboardDidShow),
-            name: UIResponder.keyboardDidShowNotification,
-            object: nil
-        )
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(keyboardDidHide),
-            name: UIResponder.keyboardDidHideNotification,
-            object: nil
-        )
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidShow), name: UIResponder.keyboardDidShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidHide), name: UIResponder.keyboardDidHideNotification, object: nil)
     }
 
     private func removeObservers() {
-        NotificationCenter.default.removeObserver(
-            self,
-            name: UIResponder.keyboardWillShowNotification,
-            object: nil
-        )
-        NotificationCenter.default.removeObserver(
-            self,
-            name: UIResponder.keyboardWillHideNotification,
-            object: nil
-        )
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
 
 
     @objc func keyboardDidShow(notification: Notification) {
         guard let userInfo = notification.userInfo else { return }
         let keyboardFrameSize = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
-
         scrollView.setContentOffset(CGPoint(x: 0, y: 50), animated: true)
         scrollView.contentSize = CGSize(width: .zero, height: view.bounds.size.height + keyboardFrameSize.height)
 
@@ -101,7 +81,6 @@ final class LogInViewController: UIViewController {
 
     @objc func keyboardDidHide(notification: Notification) {
         scrollView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
-
     }
 
     @objc func logInButtonDidTapped() {
@@ -113,27 +92,50 @@ final class LogInViewController: UIViewController {
             navigationController?.pushViewController(profileVC, animated: true)
         } else {
             navigationController?.pushViewController(profileVC, animated: true)
-            //для дз
-            // TODO: потом здес будет шоуалерт
         }
     }
 
 
-    func setupScrollView(){
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        contentView.translatesAutoresizingMaskIntoConstraints = false
+    func setupScrollView() {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
+        
+        NSLayoutConstraint.activate([
+            scrollView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            scrollView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        ])
+        
+        NSLayoutConstraint.activate([
+            contentView.centerYAnchor.constraint(equalTo: scrollView.centerYAnchor),
+            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+            contentView.heightAnchor.constraint(equalTo: scrollView.heightAnchor, constant: 200),
+            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor)
+        ])
+    }
+}
 
-        scrollView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
-        scrollView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor).isActive = true
-        scrollView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
 
-        contentView.centerYAnchor.constraint(equalTo: scrollView.centerYAnchor).isActive = true
-        contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor).isActive = true
-        contentView.heightAnchor.constraint(equalTo: scrollView.heightAnchor, constant: 200).isActive = true
-        contentView.topAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
-        contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor).isActive = true
+extension LogInViewController: UITextFieldDelegate {
+    private func setKeyboardSettings(forUITextField textField: UITextField) {
+        textField.delegate = self
+        textField.keyboardAppearance = .dark
+        textField.autocorrectionType = .no
+        textField.returnKeyType = .done
+        textField.enablesReturnKeyAutomatically = true
+        textField.clearButtonMode = .always
+        let tapOnView = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        addGestureRecognizer(tapOnView)
+    }
+
+    @objc func dismissKeyboard() {
+        endEditing(true)
+    }
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        dismissKeyboard()
+        return true
     }
 }
