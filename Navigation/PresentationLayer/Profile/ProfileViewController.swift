@@ -55,7 +55,7 @@ extension ProfileViewController {
         let navBarAppearance = UINavigationBarAppearance()
         navBarAppearance.backgroundColor = .systemGray3
         navBarAppearance.titleTextAttributes = [
-            .foregroundColor: UIColor(named: "VKColor") ?? UIColor.systemCyan
+            .foregroundColor: UIColor(named: "VKcolor") ?? UIColor.systemCyan
         ]
         navigationItem.hidesBackButton = true
         navigationController?.navigationBar.isHidden = true

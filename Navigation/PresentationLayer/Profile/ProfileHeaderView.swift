@@ -96,7 +96,7 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Setup Status", for: .normal)
-        button.backgroundColor = UIColor(named: "VKColor")
+        button.backgroundColor = UIColor(named: "VKcolor")
         button.layer.cornerRadius = 4
         button.layer.shadowOffset = CGSize(width: 4, height: 4)
         button.layer.shadowRadius = 4

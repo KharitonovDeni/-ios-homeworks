@@ -99,13 +99,13 @@ class PostDetailViewController: UIViewController {
         let navBarAppearance = UINavigationBarAppearance()
         navBarAppearance.backgroundColor = .systemGray3
         navBarAppearance.titleTextAttributes = [
-            .foregroundColor: UIColor(named: "VKColor") ?? UIColor.systemCyan
+            .foregroundColor: UIColor(named: "VKcolor") ?? UIColor.systemCyan
         ]
         navigationItem.hidesBackButton = false
         navigationController?.navigationBar.isHidden = false
         navigationController?.navigationBar.standardAppearance = navBarAppearance
         navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearance
-        navigationController?.navigationBar.tintColor = UIColor(named: "VKColor")
+        navigationController?.navigationBar.tintColor = UIColor(named: "VKcolor")
     }
     
     private func setConstraints() {

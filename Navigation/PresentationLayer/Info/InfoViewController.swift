@@ -11,7 +11,7 @@ class InfoViewController: UIViewController {
 
     lazy var showAlertButton: UIButton = {
         var buttonConfiguration = UIButton.Configuration.filled()
-        buttonConfiguration.baseBackgroundColor = UIColor(named: "VKColor")
+        buttonConfiguration.baseBackgroundColor = UIColor(named: "VKcolor")
         buttonConfiguration.title = "Show Alert"
         let button = UIButton(
             configuration: buttonConfiguration,

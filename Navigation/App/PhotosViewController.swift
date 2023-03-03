@@ -106,11 +106,11 @@ extension PhotosViewController {
         let navBarAppearance = UINavigationBarAppearance()
         title = "Photo Gallery"
         navBarAppearance.backgroundColor = .systemGray3
-        navBarAppearance.titleTextAttributes = [.foregroundColor: UIColor(named: "VKColor")
+        navBarAppearance.titleTextAttributes = [.foregroundColor: UIColor(named: "VKcolor")
                                                 ?? UIColor.systemCyan]
         navigationController?.navigationBar.standardAppearance = navBarAppearance
         navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearance
-        navigationController?.navigationBar.tintColor = UIColor(named: "VKColor")
+        navigationController?.navigationBar.tintColor = UIColor(named: "VKcolor")
         navigationItem.rightBarButtonItem = UIBarButtonItem(
             barButtonSystemItem: .close,
             target: self,

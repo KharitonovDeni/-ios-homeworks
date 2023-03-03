@@ -75,10 +75,10 @@ extension FeedViewController {
         title = "Feed"
         let navBarAppearance = UINavigationBarAppearance()
         navBarAppearance.backgroundColor = .systemGray3
-        navBarAppearance.titleTextAttributes = [.foregroundColor: UIColor(named: "VKColor") ?? UIColor.systemCyan]
+        navBarAppearance.titleTextAttributes = [.foregroundColor: UIColor(named: "VKcolor") ?? UIColor.systemCyan]
         navigationController?.navigationBar.standardAppearance = navBarAppearance
         navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearance
-        navigationController?.navigationBar.tintColor = UIColor(named: "VKColor")
+        navigationController?.navigationBar.tintColor = UIColor(named: "VKcolor")
     }
 
     private func setStackSubviews(_ subviews: UIView...) {

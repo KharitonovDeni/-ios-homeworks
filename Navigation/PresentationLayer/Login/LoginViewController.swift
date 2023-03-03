@@ -12,7 +12,7 @@ final class LogInViewController: UIViewController {
     
     let user = User.getDefaultUser()
     
-    private let VKColor = UIColor(named: "VKColor")
+    private let VKColor = UIColor(named: "VKcolor")
     
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -36,7 +36,7 @@ final class LogInViewController: UIViewController {
     
     private lazy var logoImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "VKLogo")
+        imageView.image = UIImage(named: "VKlogo")
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()

@@ -26,7 +26,7 @@ extension PostViewController {
     private func setupNavigationBar() {
         let navBarAppearance = UINavigationBarAppearance()
         navBarAppearance.backgroundColor = .systemGray3
-        navBarAppearance.titleTextAttributes = [.foregroundColor: UIColor(named: "VKColor") ?? UIColor.systemCyan]
+        navBarAppearance.titleTextAttributes = [.foregroundColor: UIColor(named: "VKcolor") ?? UIColor.systemCyan]
         navigationController?.navigationBar.standardAppearance = navBarAppearance
         navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearance
         navigationItem.rightBarButtonItems = [
@@ -36,7 +36,7 @@ extension PostViewController {
                 target: self,
                 action: #selector(goToInfo)
             )]
-        navigationController?.navigationBar.tintColor = UIColor(named: "VKColor")
+        navigationController?.navigationBar.tintColor = UIColor(named: "VKcolor")
     }
     
     @objc private func goToInfo() {
